@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyNotes - Welcome</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .message {
+            text-align: center;
+            background-color: greenyellow;
+            width: 100vw;
+            height: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: messageAnime 5s infinite;
+        }
+
+        @keyframes messageAnime {
+            0%{
+                background-color: aqua;
+            }
+
+            50% {
+                background-color: aqua;
+            }
+
+            100% {
+                background-color: aqua;
+            }
+        }
+
+        .message h4 {
+            position: fixed;
+            left: 20px;
+        }
+
+        .cross {
+            position: fixed;
+            right: 10px;
+        }
+
+        .cross:hover {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .logout {
+            position: fixed;
+            right: 20px;
+            top: 10px;
+        }
+        
+        .logout button{
+            padding: 10px;
+            background-color: brown;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .logout button:hover {
+            cursor: pointer;
+        }
+
+        .addTask form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 70px;
+        }
+
+        .addTask form input, .addTask form textarea {
+            padding: 10px;
+            margin: 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: #e8f0fe;
+        }
+
+        .addTask form input::placeholder, textarea::placeholder{
+            color: dodgerblue;
+        }
+
+        .addTask button{
+            color: green;
+            background-color: seashell;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            width: 20%;
+        }
+        .addTask button:hover {
+            background-color: lightgreen;
+            color: black;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <h4>Welcome <%= locals.message %></h4>
+        <span class="cross">X</span>
+    </div>
+
+    <div class="logout">
+        <form action="/api/v1/users/logout/" get="get">
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <div class="addTask">
+        <!-- <img src="bg.jpg" alt="background-image" width = "200px" height="200px"> -->
+        <form action="/api/v1/task/new" method="post">
+            <input type="text" name="title" placeholder="Enter a Title of the Task">
+            <textarea name="description"  cols="30" rows="10" placeholder="Enter a Task here..."></textarea>
+            <button>Add Your Task</button>
+        </form>
+    </div>
+
+    <div class="tasks">
+
+    </div>
+    <script>
+        let cross = document.querySelector(".cross");
+        let message = document.querySelector(".message");
+        
+        function hideMessage() {
+            message.classList.add("hidden");
+        }
+
+        setTimeout(hideMessage, 5000);
+
+        cross.addEventListener("click", () => {
+            hideMessage();
+        });
+
+
+        try {
+            const data = await fetch(`${process.env.MONGO_URI}`);
+            console.log(data);
+        }catch(e) {
+            console.log(e);
+        }
+    </script>
+</body>
+</html>

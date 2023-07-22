@@ -1,6 +1,8 @@
 import ErrorHandler from "../middlewares/error.js";
 import { Task } from "../models/task.js";
 
+
+
 export const newTask = async (req, res, next) => {
     //Always use try catch block when we use async await.
     try {
@@ -12,10 +14,7 @@ export const newTask = async (req, res, next) => {
             user: req.user,
         });
 
-        res.status(201).json({
-            success: true,
-            message: "Task added successfully",
-        });
+        res.status(201).redirect("/")
     } catch (error) {
         next(err);
     }

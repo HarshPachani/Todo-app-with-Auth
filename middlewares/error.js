@@ -5,10 +5,9 @@ class ErrorHandler extends Error {
     }
 }
 
-//This is the middleware of an error handling for next() functions.
 export const errorMiddleware = (err, req, res, next) => {
     err.message = err.message || "Internal Server Error!";
-    err.statusCode =  err.statusCode || 500;
+    err.statusCode = err.statusCode || 500;
 
     return res.status(err.statusCode).json({
         success: false,

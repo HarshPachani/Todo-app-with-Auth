@@ -1,36 +1,63 @@
 import express from "express";
+import { config } from "dotenv";
 import userRouter from "./routes/user.js";
 import taskRouter from "./routes/task.js";
-import { config }  from "dotenv";
 import cookieParser from "cookie-parser";
 import { errorMiddleware } from "./middlewares/error.js";
-
-//when we transfer our app from localhost to the internet server then the url will change from localhost to the corresponding URL.
-//for that reason we use cors.
-import cors from "cors"; //It is used for server deployment.
+import path from "path";
+import bodyParser from "body-parser";
+import jwt from "jsonwebtoken";
+import { User } from "./models/user.js";
 
 export const app = express();
+const port = 5000;
 
 config({
     path: "./data/config.env"
 });
 
-//Using middleware
+app.set("view engine", "ejs");
+
+app.use(express.static(path.join(path.resolve(), "public")));
+app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: [process.env.FRONTEND_URL],
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, //It is necessary.
-}));
 
-//Here /users is a prefix of the url, that means in user.js we don't need to add /users for all the time, it will automatically added.
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/task", taskRouter);
 
-app.get("/", (req, res) => {
-    res.send("Nice Working");
+app.get("/", async (req, res) => {
+
+    const token = req.cookies.token;
+    // console.log(token);
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        // console.log(decoded);
+    }
+    catch(e) {
+        console.log(e);
+    }
+    
+    if(!token) {
+        res.render(path.join(path.resolve(), "./views/index"));
+    }
+    else {
+        let name;
+        try {
+            const userId = await User.findById(decoded);
+            name = userId.name; 
+        } catch(e) {
+            // console.log(e);
+        }
+
+        res.render(path.join(path.resolve(), "./views/AfterLogin"), {name});
+    }
+    // res.sendFile(path.join(path.resolve(), "./views/index"));
 });
 
-//This is the middleware of an error handling for next() functions.
+app.get("/createAccount.html", (req, res) => {
+    res.render(path.join(path.resolve(), "./views/createAccount"));
+});
+
 app.use(errorMiddleware);
