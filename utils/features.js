@@ -18,5 +18,6 @@ export const sendCookie = (user, res, username, statusCode = 200) => {
         //     success: true,
         //     message,
         // });
-        .render(path.join(path.resolve(), "./views/AfterLogin"), {name: username});
+        // .sendFile(path.join(path.resolve(), "./views/dist/AfterLogin.html"));
+        .redirect("/");
 }

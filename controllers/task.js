@@ -16,7 +16,7 @@ export const newTask = async (req, res, next) => {
 
         res.status(201).redirect("/")
     } catch (error) {
-        next(err);
+        next(error);
     }
 };
 

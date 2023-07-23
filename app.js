@@ -16,7 +16,7 @@ config({
     path: "./data/config.env"
 });
 
-app.set("view engine", "ejs");
+app.set("view engine", "html");
 
 app.use(express.static(path.join(path.resolve(), "public")));
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -31,18 +31,18 @@ app.get("/", async (req, res) => {
     const token = req.cookies.token;
     // console.log(token);
 
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        // console.log(decoded);
-    }
-    catch(e) {
-        console.log(e);
-    }
-    
     if(!token) {
-        res.render(path.join(path.resolve(), "./views/index"));
+        res.sendFile(path.join(path.resolve(), "./views/dist/index.html"));
+        // res.render(path.join(path.resolve(), "./views/dist/index"));
     }
     else {
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            console.log(decoded);
+        } catch(e) {
+            console.log(e);
+        }
+
         let name;
         try {
             const userId = await User.findById(decoded);
@@ -50,14 +50,12 @@ app.get("/", async (req, res) => {
         } catch(e) {
             // console.log(e);
         }
-
-        res.render(path.join(path.resolve(), "./views/AfterLogin"), {name});
+        res.sendFile(path.join(path.resolve(), "./views/dist/AfterLogin.html"));
     }
-    // res.sendFile(path.join(path.resolve(), "./views/index"));
 });
 
 app.get("/createAccount.html", (req, res) => {
-    res.render(path.join(path.resolve(), "./views/createAccount"));
+    res.sendFile(path.join(path.resolve(), "./views/dist/createAccount.html"));
 });
 
 app.use(errorMiddleware);
