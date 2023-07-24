@@ -40,7 +40,7 @@ export const updateTask = async (req, res, next) => {
         const { id } = req.params;
     
         const task = await Task.findById(id);
-        
+
         if(!task)   return next(new ErrorHandler("Task not Found", 404));
         
         task.isCompleted = !task.isCompleted;
@@ -59,6 +59,7 @@ export const updateTask = async (req, res, next) => {
 
 export const deleteTask = async (req, res, next) => {
     try {
+        console.log(req.params.id);
         const task = await Task.findById(req.params.id);
         
         if(!task)   return next(new ErrorHandler("Task not Found", 404));
