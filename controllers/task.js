@@ -40,9 +40,8 @@ export const updateTask = async (req, res, next) => {
         const { id } = req.params;
     
         const task = await Task.findById(id);
-    
         
-        if(!task)   if(!task)   return next(new ErrorHandler("Task not Found", 404));
+        if(!task)   return next(new ErrorHandler("Task not Found", 404));
         
         task.isCompleted = !task.isCompleted;
     
