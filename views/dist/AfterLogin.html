@@ -77,6 +77,7 @@
           for(let i = 0; i < data.tasks.length; i++) {
               console.log(`id: ${id[i]}, title: ${title[i]}, description: ${description[i]}`);
           }
+          //<form action="/api/v1/task/${id[index]}" method="post">
         
           let index = 1;
           for (let i = 0; i < data.tasks.length; i++) {
@@ -85,11 +86,13 @@
                       <li class="py-4">
                           <div class="flex items-center">
                               ${index}
-                              <label for="todo1" class="ml-3 block text-gray-900">
-                                  <span class="text-lg font-medium">${data.tasks[i].title}</span>
-                                  <span class="text-sm font-light text-gray-500">${data.tasks[i].description}</span>
+                              <label for="todo1" class="ml-3 block text-gray-900 flex flex-col">
+                                  <span class="text-sm font-light">${data.tasks[i].title}</span>
+                                  <span class="text-lg font-medium ml-5">${data.tasks[i].description}</span>
                               </label>   
-                              <form action="/api/v1/task:/${id[index]}/" method="delete">
+
+                              <form method="post" action="/api/v1/task/${id[index-1]}?_method=DELETE">
+                                <input type="hidden" name="_method" value="DELETE">
                                 <button onclick = "deleteTodo(${index})" type="submit" id=${index} class="dltButton bg-red-700 text-white rounded-md p-2 hover:bg-red-800 active:bg-red-600 relative right-0 ml-11">Delete</button>          
                               </form>     
                           </div>
