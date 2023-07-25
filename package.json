@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "snodemon server.js",
-    "build": "vite build"
+    "build": "vite build",
+    "vite": "vite"
   },
   "author": "",
   "license": "ISC",
