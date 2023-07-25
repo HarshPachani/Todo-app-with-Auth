@@ -38,9 +38,9 @@ app.get("/", async (req, res) => {
     else {
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            console.log(decoded);
+            // console.log(decoded);
         } catch(e) {
-            console.log(e);
+            // console.log(e);
         }
 
         let name;
